@@ -25,7 +25,8 @@ export default function AiGamePage() {
   const [playerScore, setPlayerScore] = useState(0);
   const [aiScore, setAiScore] = useState(0);
   const [round, setRound] = useState(0);
-  
+  const [currentChooser, setCurrentChooser] = useState('player'); // 'player' or 'ai'
+
   // Function to handle drawing next cards
   const drawNextCards = useCallback((pDeck = playerDeck, aDeck = aiDeck) => {
     if (pDeck.length === 0 || aDeck.length === 0) {
@@ -47,11 +48,10 @@ export default function AiGamePage() {
   // Initialize the game
   useEffect(() => {
     if (!gameStarted) return;
-    
-    // Define function inside useEffect to avoid dependency issues
+
     const initializeGame = () => {
       try {
-        const { player1Deck, player2Deck } = dealCards(5); // Starting with 5 cards for testing
+        const { player1Deck, player2Deck } = dealCards(2); // Starting with 5 cards for testing
         setPlayerDeck(player1Deck);
         setAiDeck(player2Deck);
         setPlayerCard(player1Deck[0]);
@@ -61,107 +61,111 @@ export default function AiGamePage() {
         setAiScore(0);
         setMessage("Choose a stat to battle!");
         setAiMessage("Greetings, human challenger. I am Dexter, your digital nemesis!");
+        setCurrentChooser('player'); // Human starts as the chooser
         playSoundEffect('cardFlip');
       } catch (error) {
         setMessage("Error setting up the game: " + error.message);
       }
     };
-    
+
     initializeGame();
   }, [gameStarted]);
 
   // Handle stat selection
-  const handleStatSelect = (statName) => {
-    if (selectedStat || animating) return; // Prevent changing selection or during animations
-    
-    setSelectedStat(statName);
-    setAnimating(true);
-    playSoundEffect('select');
-    
-    // Short delay before AI chooses
+  const handleStatSelect = useCallback((statName) => {
+    if (selectedStat || animating) return; // Prevent multiple selections or actions during animation
+
+    setSelectedStat(statName); // Set the selected stat
+    setAnimating(true); // Start animation
+    playSoundEffect('select'); // Play selection sound
+
     setTimeout(() => {
-      // AI selects a stat based on difficulty
-      const aiStat = aiSelectStat(aiCard, playerDeck, difficulty);
-      setAiSelectedStat(aiStat);
-      playSoundEffect('cardFlip');
-      
-      // Determine the winner after another short delay
+      const playerStatValue = playerCard.stats[statName];
+      const aiStatValue = aiCard.stats[statName]; // Compare the same stat for both cards
+
+      const result = determineWinner(playerStatValue, aiStatValue); // Determine the winner
+
+      if (result === 'player') {
+        setBattleResult('win');
+        setMessage(`You win this round! Your ${statName}: ${playerStatValue} beats AI's ${statName}: ${aiStatValue}`);
+        setAiMessage(getAiTaunt('lose'));
+        setPlayerScore((prev) => prev + 1);
+        setCurrentChooser('player'); // Player gets to choose next round
+        playSoundEffect('victory');
+
+        // Update decks
+        setPlayerDeck((prevDeck) => {
+          const newDeck = [...prevDeck];
+          newDeck.shift();
+          newDeck.push(aiCard);
+          return newDeck;
+        });
+
+        setAiDeck((prevDeck) => {
+          const newDeck = [...prevDeck];
+          newDeck.shift();
+          return newDeck;
+        });
+      } else if (result === 'ai') {
+        setBattleResult('lose');
+        setMessage(`AI wins this round! AI's ${statName}: ${aiStatValue} beats your ${statName}: ${playerStatValue}`);
+        setAiMessage(getAiTaunt('win'));
+        setAiScore((prev) => prev + 1);
+        setCurrentChooser('ai'); // AI gets to choose next round
+        playSoundEffect('defeat');
+
+        // Update decks
+        setAiDeck((prevDeck) => {
+          const newDeck = [...prevDeck];
+          newDeck.shift();
+          newDeck.push(playerCard);
+          return newDeck;
+        });
+
+        setPlayerDeck((prevDeck) => {
+          const newDeck = [...prevDeck];
+          newDeck.shift();
+          return newDeck;
+        });
+      } else {
+        setBattleResult('draw');
+        setMessage(`It's a draw! Both ${statName} values are ${playerStatValue}`);
+        setAiMessage(getAiTaunt('draw'));
+        playSoundEffect('draw');
+
+        // Both cards go to the bottom of their respective decks
+        setPlayerDeck((prevDeck) => {
+          const newDeck = [...prevDeck];
+          newDeck.shift();
+          newDeck.push(playerCard);
+          return newDeck;
+        });
+
+        setAiDeck((prevDeck) => {
+          const newDeck = [...prevDeck];
+          newDeck.shift();
+          newDeck.push(aiCard);
+          return newDeck;
+        });
+      }
+
       setTimeout(() => {
-        const playerStatValue = playerCard.stats[statName];
-        const aiStatValue = aiCard.stats[aiStat];
-        
-        const result = determineWinner(playerStatValue, aiStatValue);
-        
-        if (result === 'player') {
-          setBattleResult('win');
-          setMessage(`You win this round! Your ${statName}: ${playerStatValue} beats AI's ${aiStat}: ${aiStatValue}`);
-          setAiMessage(getAiTaunt('lose'));
-          setPlayerScore(prev => prev + 1);
-          playSoundEffect('victory');
-          
-          // Player gets AI's card
-          setPlayerDeck(prevDeck => {
-            const newDeck = [...prevDeck];
-            newDeck.shift(); // Remove the used card
-            newDeck.push(aiCard); // Add AI's card
-            return newDeck;
-          });
-          
-          setAiDeck(prevDeck => {
-            const newDeck = [...prevDeck];
-            newDeck.shift(); // Remove the lost card
-            return newDeck;
-          });
-        } else if (result === 'ai') {
-          setBattleResult('lose');
-          setMessage(`AI wins this round! AI's ${aiStat}: ${aiStatValue} beats your ${statName}: ${playerStatValue}`);
-          setAiMessage(getAiTaunt('win'));
-          setAiScore(prev => prev + 1);
-          playSoundEffect('defeat');
-          
-          // AI gets player's card
-          setAiDeck(prevDeck => {
-            const newDeck = [...prevDeck];
-            newDeck.shift(); // Remove the used card
-            newDeck.push(playerCard); // Add player's card
-            return newDeck;
-          });
-          
-          setPlayerDeck(prevDeck => {
-            const newDeck = [...prevDeck];
-            newDeck.shift(); // Remove the lost card
-            return newDeck;
-          });
-        } else {
-          setBattleResult('draw');
-          setMessage(`It's a draw! Both ${statName} values are ${playerStatValue}`);
-          setAiMessage(getAiTaunt('draw'));
-          playSoundEffect('draw');
-          
-          // Both cards go to the bottom of their respective decks
-          setPlayerDeck(prevDeck => {
-            const newDeck = [...prevDeck];
-            newDeck.shift();
-            newDeck.push(playerCard);
-            return newDeck;
-          });
-          
-          setAiDeck(prevDeck => {
-            const newDeck = [...prevDeck];
-            newDeck.shift();
-            newDeck.push(aiCard);
-            return newDeck;
-          });
-        }
-        
-        // Move to next round after a delay
-        setTimeout(() => {
-          setRound(prevRound => prevRound + 1);
-          drawNextCards();
-        }, 2500);
-      }, 1000);
-    }, 500);
-  };
+        setRound((prevRound) => prevRound + 1); // Increment the round
+        drawNextCards(); // Draw the next cards
+      }, 2500);
+    }, 1000);
+  }, [selectedStat, animating, playerCard, aiCard, drawNextCards]);
+
+  // Modify the AI's turn to choose a stat
+  useEffect(() => {
+    if (currentChooser === 'ai' && !selectedStat && !animating) {
+      const aiStat = aiSelectStat(aiCard, playerDeck, difficulty); // AI selects a stat
+      setAiSelectedStat(aiStat); // Set the AI's selected stat
+      playSoundEffect('cardFlip');
+
+      setTimeout(() => handleStatSelect(aiStat), 1000); // Trigger stat comparison
+    }
+  }, [currentChooser, aiCard, playerDeck, selectedStat, animating, difficulty, handleStatSelect]);
 
   // Start the game
   const startGame = () => {
@@ -184,6 +188,7 @@ export default function AiGamePage() {
     setPlayerScore(0);
     setAiScore(0);
     setGameStarted(false);
+    setCurrentChooser('player'); // Reset chooser to player
   };
 
   // Handle difficulty change
@@ -288,8 +293,8 @@ export default function AiGamePage() {
                 <div className={battleResult === 'lose' ? styles.winningCard : ''}>
                   <PokemonCard 
                     pokemon={aiCard}
-                    showBack={!!aiSelectedStat}
-                    selectedStat={aiSelectedStat}
+                    showBack={!!aiSelectedStat} // Only show the back of the card if the AI has selected a stat // Only show the back of the card if the AI has selected a stat
+                    selectedStat={aiSelectedStat} // Highlight the AI's selected stat // Highlight the AI's selected stat
                   />
                 </div>
               )}
