@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
+/* In src/app/globals.css */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #ff5350;          /* Pokémon red */
+  --secondary: #3b5ba7;        /* Pokémon blue */
+  --background: #f0f0f0;       /* Light gray background */
+  --card-bg: #ffffff;          /* White card background */
+  --text: #333333;             /* Dark text */
+  --accent: #ffcb05;           /* Pokémon yellow */
+  --border-radius: 16px;       /* Rounded corners */
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background-color: #e34240;  /* Darker red */
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: center;
+  color: var(--primary);
 }

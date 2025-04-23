@@ -1,103 +1,87 @@
-import Image from "next/image";
+"use client";
+import Link from 'next/link';
+import { useState } from 'react';
+import '../app/globals.css';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [showRules, setShowRules] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <main className="container" style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      minHeight: '100vh',
+      justifyContent: 'center',
+      padding: '20px'
+    }}>
+      {/* Game Title Card */}
+      <div className="card" style={{ 
+        textAlign: 'center',
+        backgroundColor: '#ff5350',
+        color: 'white',
+        padding: '30px'
+      }}>
+        <h1 style={{ fontSize: '2.5rem', marginBottom: '10px' }}>Poké Battle!</h1>
+        <p style={{ fontSize: '1.2rem' }}>The Ultimate Stat Showdown</p>
+      </div>
+
+      {/* Game Mode Selection */}
+      <div className="card">
+        <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Choose Game Mode</h2>
+        <div style={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        }}>
+          <Link href="/game/ai" style={{ textDecoration: 'none' }}>
+            <button className="button" style={{ width: '100%' }}>
+              Battle Against Dexter (AI)
+            </button>
+          </Link>
+          <Link href="/game/local" style={{ textDecoration: 'none' }}>
+            <button className="button" style={{ 
+              width: '100%', 
+              backgroundColor: 'var(--secondary)'
+            }}>
+              Local 2-Player Battle
+            </button>
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </div>
+
+      {/* Rules Toggle Button */}
+      <div className="card">
+        <button 
+          className="button" 
+          style={{ 
+            width: '100%',
+            backgroundColor: 'var(--accent)',
+            color: 'var(--text)'
+          }}
+          onClick={() => setShowRules(!showRules)}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          {showRules ? 'Hide Rules' : 'Show Rules'}
+        </button>
+        
+        {/* Rules Content - Shows when button is clicked */}
+        {showRules && (
+          <div style={{ marginTop: '20px' }}>
+            <h3 style={{ marginBottom: '10px' }}>How to Play:</h3>
+            <ol style={{ paddingLeft: '20px', lineHeight: '1.5' }}>
+              <li>Each player receives 10 random Pokémon cards</li>
+              <li>On your turn, select one of the six stats to battle with</li>
+              <li>The Pokémon with the higher stat wins the round</li>
+              <li>The winner collects the loser&apos;s card</li>
+              <li>The player who collects all cards wins!</li>
+            </ol>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div style={{ marginTop: '20px', textAlign: 'center', opacity: '0.7' }}>
+        <p>A nostalgic Pokémon card battle experience</p>
+      </div>
+    </main>
   );
 }

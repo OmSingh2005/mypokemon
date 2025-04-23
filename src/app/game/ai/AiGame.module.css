@@ -1,0 +1,340 @@
+/* src/app/game/ai/AiGame.module.css */
+.gameContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .header h1 {
+    color: var(--primary);
+    margin: 0;
+  }
+  
+  .scoreboard {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .score {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 8px 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .scoreValue {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--primary);
+  }
+  
+  .roundDisplay {
+    background-color: var(--accent);
+    color: var(--text);
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+  }
+  
+  .messageBox {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  .aiMessageBox {
+    display: flex;
+    align-items: center;
+    background-color: var(--secondary);
+    color: white;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    margin: 20px 0;
+    box-shadow: var(--shadow);
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .aiAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #2a4580;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: 15px;
+    flex-shrink: 0;
+  }
+  
+  .aiMessageText {
+    font-style: italic;
+  }
+  
+  .battleArea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    flex: 1;
+  }
+  
+  .playerArea, .aiArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .playerArea h2, .aiArea h2 {
+    margin-bottom: 10px;
+    color: var(--secondary);
+  }
+  
+  .vsSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .vsCircle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--text);
+    box-shadow: var(--shadow);
+  }
+  
+  .resultBadge {
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  @keyframes popIn {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    70% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .win {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .lose {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .draw {
+    background-color: #ff9800;
+    color: white;
+  }
+  
+  .statBadge {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: var(--accent);
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .winningCard {
+    animation: pulse 1.5s infinite;
+    position: relative;
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 203, 5, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 15px rgba(255, 203, 5, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 203, 5, 0);
+    }
+  }
+  
+  .instructions {
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+  }
+  
+  .startScreen, .gameOverScreen {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    margin: 40px 0;
+  }
+  
+  .startScreen h2, .gameOverScreen h2 {
+    color: var(--primary);
+    margin-bottom: 20px;
+  }
+  
+  .startScreen p {
+    margin-bottom: 30px;
+  }
+  
+  .difficultySelector {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .selectField {
+    padding: 10px;
+    border-radius: var(--border-radius);
+    border: 1px solid #ddd;
+    background-color: white;
+    width: 100%;
+    max-width: 300px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 15px;
+  }
+  
+  .button:hover {
+    background-color: #e34240;
+    transform: translateY(-2px);
+  }
+  
+  .smallButton {
+    background-color: var(--secondary);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .smallButton:hover {
+    background-color: #2a4580;
+  }
+  
+  .homeLink {
+    display: block;
+    text-decoration: none;
+    color: var(--secondary);
+    margin-top: 10px;
+  }
+  
+  .homeLink:hover {
+    text-decoration: underline;
+  }
+  
+  .gameControls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .finalScore {
+    background-color: var(--accent);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    margin: 20px 0;
+  }
+  
+  .scoreDisplay {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  
+  @media (max-width: 768px) {
+    .battleArea {
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .vsSection {
+      margin: 10px 0;
+    }
+    
+    .scoreboard {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
