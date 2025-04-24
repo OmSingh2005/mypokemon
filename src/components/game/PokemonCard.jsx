@@ -36,7 +36,7 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
       <div className={styles.cardInner}>
         {/* Front of Card (Pokémon Image) */}
         <div className={styles.cardFront}>
-          <div className={styles.pokemonName}>{pokemon.name}</div>
+          <div className={styles.pokemonName}></div>
           <div className={styles.imageContainer}>
             {/* We'll use a placeholder for now */}
             <div className={styles.pokemonImage}>
@@ -53,6 +53,16 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
         {/* Back of Card (Stats) */}
         <div className={styles.cardBack}>
           <div className={styles.pokemonName}>{pokemon.name}</div>
+          <div className={styles.imageContainer}>
+            {/* We'll use a placeholder for now */}
+            <div className={styles.pokemonImage}>
+              {pokemon.sprite ? (
+                <img src={pokemon.sprite} alt={pokemon.name} />
+              ) : (
+                <div className={styles.placeholder}>{pokemon.name.charAt(0)}</div>
+              )}
+            </div>
+          </div>
           <div className={styles.statsContainer}>
             {Object.entries(pokemon.stats).map(([stat, value]) => (
               <div 

@@ -265,15 +265,10 @@ export default function AiGamePage() {
                 <div className={battleResult === 'win' ? styles.winningCard : ''}>
                   <PokemonCard 
                     pokemon={playerCard} 
-                    onStatSelect={handleStatSelect}
-                    showBack={true}
+                    onStatSelect={currentChooser === 'player' ? handleStatSelect : null} // Allow stat selection only if it's the player's turn
+                    showBack={true} // Always show the front of the player's card
                     selectedStat={selectedStat}
                   />
-                </div>
-              )}
-              {selectedStat && (
-                <div className={styles.statBadge}>
-                  {selectedStat}: {playerCard?.stats[selectedStat]}
                 </div>
               )}
             </div>
@@ -288,13 +283,13 @@ export default function AiGamePage() {
             </div>
             
             <div className={styles.aiArea}>
-              <h2>Dexters Card</h2>
+              <h2>Dexter&apos;s Card</h2>
               {aiCard && (
                 <div className={battleResult === 'lose' ? styles.winningCard : ''}>
                   <PokemonCard 
                     pokemon={aiCard}
-                    showBack={!!aiSelectedStat} // Only show the back of the card if the AI has selected a stat // Only show the back of the card if the AI has selected a stat
-                    selectedStat={aiSelectedStat} // Highlight the AI's selected stat // Highlight the AI's selected stat
+                    showBack={!aiSelectedStat} // Show the back until the AI selects a stat
+                    selectedStat={aiSelectedStat} // Highlight the AI's selected stat
                   />
                 </div>
               )}
