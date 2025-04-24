@@ -45,6 +45,8 @@ export default function AiGamePage() {
       setMessage("Your turn! Choose a stat to battle.");
       setAiMessage("Greetings, challenger. I am Dexter, your digital nemesis!");
       playSoundEffect('cardFlip');
+      addLog(`Game started! Difficulty: ${difficulty}`, 'action');
+      addLog(`You drew: ${player1Deck.map(card => card.name).join(', ')}`, 'action');
     } catch (error) {
       setMessage("Error setting up the game: " + error.message);
     }
@@ -72,18 +74,21 @@ export default function AiGamePage() {
     let newAiDeck = [...aiDeck.slice(1)];
 
     if (result === 'player') {
+      addLog(`You won with ${statName}: ${playerStatValue} vs ${aiStatValue}`, 'win');
       newPlayerDeck.push(currentAiCard, currentPlayerCard);
       setMessage(`You win this round! Your ${statName}: ${playerStatValue} beats AI's ${statName}: ${aiStatValue}`);
       setAiMessage(getAiTaunt('lose'));
       playSoundEffect('victory');
     } else if (result === 'ai') {
       newAiDeck.push(currentPlayerCard, currentAiCard);
+      addLog(`AI won with ${statName}: ${aiStatValue} vs ${playerStatValue}`, 'lose');
       setMessage(`AI wins this round! AI's ${statName}: ${aiStatValue} beats your ${statName}: ${playerStatValue}`);
       setAiMessage(getAiTaunt('win'));
       playSoundEffect('defeat');
     } else {
       newPlayerDeck.push(currentPlayerCard);
       newAiDeck.push(currentAiCard);
+      addLog(`Draw! Both had ${statName}: ${playerStatValue}`, 'draw');
       setMessage(`It's a draw! Both ${statName} values are ${playerStatValue}`);
       setAiMessage(getAiTaunt('draw'));
       playSoundEffect('draw');
@@ -98,6 +103,8 @@ export default function AiGamePage() {
       setAiDeck(newAiDeck);
       
       if (newPlayerDeck.length === 0 || newAiDeck.length === 0) {
+        const winner = newPlayerDeck.length === 0 ? 'AI' : 'Player';
+        addLog(`Game Over! ${winner} wins!`, winner === 'AI' ? 'lose' : 'win');
         setGameOver(true);
         setMessage(newPlayerDeck.length === 0 ? "Game Over! AI wins!" : "Game Over! You win!");
         playSoundEffect(newPlayerDeck.length === 0 ? 'defeat' : 'victory');
@@ -130,6 +137,7 @@ export default function AiGamePage() {
 
   // Handle stat selection by player
   const handleStatSelect = useCallback((statName) => {
+    addLog(`You selected ${statName} (Value: ${playerCard.stats[statName]})`, 'action');
     if (selectedStat || animating || processingRound || currentTurn !== 'player') return;
     
     setSelectedStat(statName);
@@ -147,6 +155,7 @@ export default function AiGamePage() {
     if (currentTurn === 'ai' && !animating && !processingRound && playerCard && aiCard) {
       const aiTimer = setTimeout(() => {
         const aiStat = aiSelectStat(aiCard, playerCard, difficulty);
+        addLog(`AI is choosing a stat...`, 'action');
         setAiSelectedStat(aiStat);
         setAnimating(true);
         playSoundEffect('select');
@@ -162,10 +171,14 @@ export default function AiGamePage() {
   }, [currentTurn, animating, processingRound, playerCard, aiCard, difficulty, processBattleResult]);
 
   const startGame = () => {
+    setLogs([]);
     setGameStarted(true);
+    
   };
 
   const restartGame = () => {
+    setLogs([]);
+    addLog(`Game restarted`, 'action');
     setGameStarted(false);
     setGameOver(false);
     setMessage("Ready to battle?");
@@ -204,6 +217,16 @@ export default function AiGamePage() {
           {gameStarted && !gameOver && (
             <div className={styles.roundDisplay}>Round {round}</div>
           )}
+          <span>
+          {/* Game Controls */}
+          {gameStarted && !gameOver && (
+            <div className={styles.roundDisplay2}>
+              <button className={styles.smallButton} onClick={restartGame}>
+                Restart
+              </button>
+            </div>
+          )}
+        </span>
         </div>
       </div>
   
@@ -221,6 +244,7 @@ export default function AiGamePage() {
         <GameOverScreen 
           playerDeck={playerDeck}
           aiDeck={aiDeck}
+          logs={logs}
           onRestart={restartGame}
         />
       ) : (
@@ -240,7 +264,9 @@ export default function AiGamePage() {
             />
   
             {/* Battle Logger (Right Side) */}
-            <BattleLogger logs={logs} />
+            <div className={styles.loggerPositioner}>
+              <BattleLogger logs={logs} />
+            </div>
           </div>
   
           {/* AI Message (Keep this outside mainBattleArea) */}
@@ -253,14 +279,6 @@ export default function AiGamePage() {
         </>
       )}
   
-      {/* Game Controls */}
-      {gameStarted && !gameOver && (
-        <div className={styles.gameControls}>
-          <button className={styles.smallButton} onClick={restartGame}>
-            Restart Game
-          </button>
-        </div>
-      )}
     </div>
   );
 }

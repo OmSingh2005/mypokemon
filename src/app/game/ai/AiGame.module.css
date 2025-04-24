@@ -297,18 +297,19 @@
   }
   
   .smallButton {
-    background-color: var(--secondary);
+    background-color: rgb(12, 68, 186);
     color: white;
+    font-weight: bold;
     border: none;
     border-radius: var(--border-radius);
     padding: 8px 16px;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     cursor: pointer;
     transition: all 0.2s ease;
   }
   
   .smallButton:hover {
-    background-color: #2a4580;
+    background-color: #b72a2a;
   }
   
   .homeLink {
@@ -321,13 +322,7 @@
   .homeLink:hover {
     text-decoration: underline;
   }
-  
-  .gameControls {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
+    
   .finalScore {
     background-color: var(--accent);
     border-radius: var(--border-radius);
@@ -348,8 +343,40 @@
     gap: 20px;
     width: 100%;
     position: relative;
+    min-height: 60vh;
   }
   
+  
+  .loggerPositioner {
+    position: relative;
+    flex: 00 0 100px; }  /* Reserve space for logger */
+    
+  .finalLogs {
+    background: rgb(12, 28, 168);
+    font-size: 1.2rem;
+    color: #fff;
+    font-family:'Times New Roman', Times, serif;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+
+  .finalLog {
+    font-size: 0.7rem;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    /*.loggerPositioner {
+      flex: 0 0 auto;
+    }*/
+  }
   /* Battle area adjustments */
   .battleArea {
     flex: 1;
