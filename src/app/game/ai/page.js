@@ -116,7 +116,7 @@ export default function AiGamePage() {
         // Create new array without the top card
         const newDeck = [...prevDeck.slice(1)];
         // Add both cards to bottom of player's deck
-        return [...newDeck, playerCard, aiCard];
+        return [...newDeck, aiCard, playerCard];
       });
 
       setAiDeck(prevDeck => [...prevDeck.slice(1)]);
