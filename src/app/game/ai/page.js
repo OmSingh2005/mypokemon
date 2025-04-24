@@ -6,6 +6,7 @@ import { determineWinner, aiSelectStat, getAiTaunt, playSoundEffect } from '../.
 import Link from 'next/link';
 import styles from './AiGame.module.css';
 
+// AIgamepage
 export default function AiGamePage() {
   // Game state
   const [playerDeck, setPlayerDeck] = useState([]);
