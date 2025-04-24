@@ -149,6 +149,20 @@
     border-radius: var(--border-radius);
     font-weight: bold;
     animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    transform: scale(0.8);
+    animation: fadeIn 0.3s forwards;
+  }
+  .resultBadge.draw {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
   
   @keyframes popIn {
@@ -201,6 +215,7 @@
   .winningCard {
     animation: pulse 1.5s infinite;
     position: relative;
+    animation: pulseGlow 0.5s 2;
   }
   
   @keyframes pulse {
@@ -213,6 +228,11 @@
     100% {
       box-shadow: 0 0 0 0 rgba(255, 203, 5, 0);
     }
+  }
+  @keyframes pulseGlow {
+    0% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+    50% { box-shadow: 0 0 20px rgba(255,215,0,0.8); }
+    100% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
   }
   
   .instructions {
@@ -323,6 +343,48 @@
     font-size: 1.2rem;
   }
   
+  .mainBattleArea {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    position: relative;
+  }
+  
+  /* Battle area adjustments */
+  .battleArea {
+    flex: 1;
+    min-width: 0; /* Prevents overflow */
+  }
+
+  /* Logger container - will use component's own styles */
+  .loggerWrapper {
+    width: 280px;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 1024px) {
+    .mainBattleArea {
+      flex-direction: column;
+    }
+
+    .battleArea {
+      order: 1;
+    }
+    
+    .loggerWrapper {
+      order: 2;
+      width: 100%;
+      position: static;
+      margin-top: 20px;
+      max-height: 200px;
+    }
+  }
+  
+  /* Existing battle area adjustments for logger */
   @media (max-width: 768px) {
     .battleArea {
       flex-direction: column;

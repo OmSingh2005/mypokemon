@@ -1,0 +1,43 @@
+/* Logger.module.css */
+.container {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 250px;
+    max-height: 300px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+  }
+  
+.title {
+    margin: 0 0 10px 0;
+    color: #ff6b6b;
+    text-align: center;
+  }
+  
+.logs {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 5px;
+  }
+  
+.log {
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+  
+  .win { background: #e3f7e3; color: #2e7d32; }
+  .lose { background: #ffebee; color: #c62828; }
+  .draw { background: #fff8e1; color: #f57f17; }
+  .action { background: #e3f2fd; color: #1565c0; }
+  
+  .timestamp {
+    color: #888;
+    font-size: 0.8em;
+    margin-right: 5px;
+  }
