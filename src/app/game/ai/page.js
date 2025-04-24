@@ -38,8 +38,10 @@ export default function AiGamePage() {
     }
 
     // Set top cards from each deck
-    const newPlayerCard = playerDeck[0];
-    const newAiCard = aiDeck[0];
+    const newPlayerCard = {...playerDeck[0]};
+    const newAiCard = {...aiDeck[0]};
+    setPlayerCard(newPlayerCard);
+    setAiCard(newAiCard);
     
     // Add a small timeout to ensure state updates are complete before setting cards
     setTimeout(() => {
@@ -156,8 +158,20 @@ export default function AiGamePage() {
     setRound(prevRound => prevRound + 1);
     
     // Schedule next round
+    // Schedule next round
     setTimeout(() => {
-      drawNextCards();
+      // Force refresh cards from the updated decks BEFORE calling drawNextCards
+      const updatedPlayerDeck = [...playerDeck];
+      const updatedAiDeck = [...aiDeck];
+      
+      // Set the refreshed deck state first
+      setPlayerDeck(updatedPlayerDeck);
+      setAiDeck(updatedAiDeck);
+      
+      // Small delay to ensure deck state is updated before drawing cards
+      setTimeout(() => {
+        drawNextCards();
+      }, 100);
     }, 3000);
   }, [playerCard, aiCard, drawNextCards, processingRound]);
 
