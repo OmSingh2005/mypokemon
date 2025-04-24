@@ -43,8 +43,8 @@ export default function AiGamePage() {
     
     // Add a small timeout to ensure state updates are complete before setting cards
     setTimeout(() => {
-      setPlayerCard(newPlayerCard);
-      setAiCard(newAiCard);
+      setPlayerCard(playerDeck[0]);
+      setAiCard(aiDeck[0]); 
       setSelectedStat(null);
       setAiSelectedStat(null);
       setBattleResult(null);
@@ -58,7 +58,7 @@ export default function AiGamePage() {
         setMessage("AI's turn to choose a stat!");
         setAiMessage("Let me think about my next move...");
       }
-    }, 100); // Small delay to ensure proper rendering sequence
+    }, 50); // Small delay to ensure proper rendering sequence
   }, [playerDeck, aiDeck, currentTurn]);
 
   // Initialize the game
@@ -158,7 +158,7 @@ export default function AiGamePage() {
     // Schedule next round
     setTimeout(() => {
       drawNextCards();
-    }, 2500);
+    }, 3000);
   }, [playerCard, aiCard, drawNextCards, processingRound]);
 
   // Handle stat selection by player
@@ -335,7 +335,7 @@ export default function AiGamePage() {
             </div>
             
             <div className={styles.aiArea}>
-              <h2>Dexter&apos;s Card {currentTurn === 'ai' && "- AI's Turn"}</h2>
+              <h2>Dexters Card {currentTurn === 'ai' && "- AI's Turn"}</h2>
               {aiCard && (
                 <div className={battleResult === 'lose' ? styles.winningCard : ''}>
                   <PokemonCard 
@@ -348,6 +348,45 @@ export default function AiGamePage() {
               {aiSelectedStat && (
                 <div className={styles.statBadge}>
                   Chose: {aiSelectedStat}
+                </div>
+              )}
+            </div>
+            
+            <div className={styles.aiArea}>
+              <h2>Dexters Card {currentTurn === 'ai' && "- AI's Turn"}</h2>
+              {gameStarted && (
+                <div style={{
+                  position: 'fixed', 
+                  right: 0, 
+                  top: 0, 
+                  width: '150px', 
+                  height: '100vh', 
+                  backgroundColor: 'rgba(0,0,0,0.1)', 
+                  padding: '10px',
+                  overflowY: 'auto'
+                }}>
+                  <h4>Player Deck</h4>
+                  {playerDeck.map((card, i) => (
+                    <div key={`player-${i}`} style={{
+                      padding: '5px',
+                      margin: '5px 0',
+                      backgroundColor: i === 0 ? '#e6ffe6' : 'white',
+                      border: '1px solid #ccc'
+                    }}>
+                      {card.name} (#{i})
+                    </div>
+                  ))}
+                  <h4>AI Deck</h4>
+                  {aiDeck.map((card, i) => (
+                    <div key={`ai-${i}`} style={{
+                      padding: '5px',
+                      margin: '5px 0',
+                      backgroundColor: i === 0 ? '#ffe6e6' : 'white',
+                      border: '1px solid #ccc'
+                    }}>
+                      {card.name} (#{i})
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
