@@ -101,80 +101,83 @@ export default function AiGamePage() {
 
   // Process battle result and update decks
   const processBattleResult = useCallback((result, statName) => {
-    if (processingRound) return; // Prevent multiple processing
+    if (processingRound) return;
     setProcessingRound(true);
+  
+    // Get current card values before any state changes
+    const currentPlayerCard = playerCard;
+    const currentAiCard = aiCard;
+    const playerStatValue = currentPlayerCard.stats[statName];
+    const aiStatValue = currentAiCard.stats[statName];
+  
+    // Calculate new decks based on result
+    let newPlayerDeck = [...playerDeck];
+    let newAiDeck = [...aiDeck];
     
-    const playerStatValue = playerCard.stats[statName];
-    const aiStatValue = aiCard.stats[statName];
-
+    // Remove the top card from both decks first
+    newPlayerDeck.shift(); // Remove player's top card
+    newAiDeck.shift(); // Remove AI's top card
+  
     if (result === 'player') {
-      setBattleResult('win');
+      // Player wins - add both cards to player's deck bottom
+      newPlayerDeck.push(currentAiCard, currentPlayerCard);
+      setCurrentTurn('player');
       setMessage(`You win this round! Your ${statName}: ${playerStatValue} beats AI's ${statName}: ${aiStatValue}`);
       setAiMessage(getAiTaunt('lose'));
-      setCurrentTurn('player'); // Player gets next turn
       playSoundEffect('victory');
-
-      // Update decks - Player wins both cards
-      setPlayerDeck(prevDeck => {
-        // Create new array without the top card
-        const newDeck = [...prevDeck.slice(1)];
-        // Add both cards to bottom of player's deck
-        return [...newDeck, aiCard, playerCard];
-      });
-
-      setAiDeck(prevDeck => [...prevDeck.slice(1)]);
-      
     } else if (result === 'ai') {
-      setBattleResult('lose');
+      // AI wins - add both cards to AI's deck bottom
+      newAiDeck.push(currentPlayerCard, currentAiCard);
+      setCurrentTurn('ai');
       setMessage(`AI wins this round! AI's ${statName}: ${aiStatValue} beats your ${statName}: ${playerStatValue}`);
       setAiMessage(getAiTaunt('win'));
-      setCurrentTurn('ai'); // AI gets next turn
       playSoundEffect('defeat');
-
-      // Update decks - AI wins both cards
-      setAiDeck(prevDeck => {
-        // Create new array without the top card
-        const newDeck = [...prevDeck.slice(1)];
-        // Add both cards to bottom of AI's deck
-        return [...newDeck, aiCard, playerCard];
-      });
-
-      setPlayerDeck(prevDeck => [...prevDeck.slice(1)]);
-      
     } else {
-      // It's a draw
-      setBattleResult('draw');
+      // Draw - return cards to respective decks
+      newPlayerDeck.push(currentPlayerCard);
+      newAiDeck.push(currentAiCard);
       setMessage(`It's a draw! Both ${statName} values are ${playerStatValue}`);
       setAiMessage(getAiTaunt('draw'));
       playSoundEffect('draw');
-
-      // Both players keep their cards (move to bottom of respective decks)
-      setPlayerDeck(prevDeck => [...prevDeck.slice(1), playerCard]);
-      setAiDeck(prevDeck => [...prevDeck.slice(1), aiCard]);
-      
-      // Turn stays with current player
     }
-
-    // Increment round counter
+  
+    setBattleResult(result);
     setRound(prevRound => prevRound + 1);
-    
-    // Schedule next round
-    // Schedule next round
+  
+    // Update decks and prepare next round
     setTimeout(() => {
-      // Force refresh cards from the updated decks BEFORE calling drawNextCards
-      const updatedPlayerDeck = [...playerDeck];
-      const updatedAiDeck = [...aiDeck];
+      setPlayerDeck(newPlayerDeck);
+      setAiDeck(newAiDeck);
       
-      // Set the refreshed deck state first
-      setPlayerDeck(updatedPlayerDeck);
-      setAiDeck(updatedAiDeck);
-      
-      // Small delay to ensure deck state is updated before drawing cards
+      // Check for game over condition
+      if (newPlayerDeck.length === 0 || newAiDeck.length === 0) {
+        setGameOver(true);
+        setMessage(newPlayerDeck.length === 0 ? "Game Over! AI wins!" : "Game Over! You win!");
+        playSoundEffect(newPlayerDeck.length === 0 ? 'defeat' : 'victory');
+        return;
+      }
+  
+      // Proceed to next round
       setTimeout(() => {
-        drawNextCards();
+        setPlayerCard(newPlayerDeck[0]);
+        setAiCard(newAiDeck[0]);
+        setSelectedStat(null);
+        setAiSelectedStat(null);
+        setBattleResult(null);
+        setAnimating(false);
+        setProcessingRound(false);
+  
+        // Set appropriate messages
+        if (currentTurn === 'player') {
+          setMessage("Your turn! Choose a stat to battle.");
+          setAiMessage("I await your choice, human...");
+        } else {
+          setMessage("AI's turn to choose a stat!");
+          setAiMessage("Let me think about my next move...");
+        }
       }, 100);
-    }, 3000);
-  }, [playerCard, aiCard, drawNextCards, processingRound]);
+    }, 2000);
+  }, [playerCard, aiCard, playerDeck, aiDeck, processingRound, currentTurn]);
 
   // Handle stat selection by player
   const handleStatSelect = useCallback((statName) => {

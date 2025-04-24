@@ -1,15 +1,11 @@
 // src/lib/game-utils.js
 
 // Function to determine winner between two stats
-export function determineWinner(playerStatValue, aiStatValue) {
-    if (playerStatValue > aiStatValue) {
-      return 'player';
-    } else if (playerStatValue < aiStatValue) {
-      return 'ai';
-    } else {
-      return 'draw';
-    }
-  }
+export function determineWinner(playerValue, aiValue) {
+  if (playerValue > aiValue) return 'player';
+  if (aiValue > playerValue) return 'ai'; 
+  return 'draw';
+}
   
   // AI difficulty levels for stat selection
   export const aiSelectStat = (aiCard, playerDeck, difficulty = 'easy') => {
