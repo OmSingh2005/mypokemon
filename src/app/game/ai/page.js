@@ -6,6 +6,10 @@ import { determineWinner, aiSelectStat, getAiTaunt, playSoundEffect } from '../.
 import Link from 'next/link';
 import styles from './AiGame.module.css';
 import BattleLogger from '../../../components/game/BattleLogger';
+import StartScreen from '../../../components/game/StartScreen';
+import GameOverScreen from '../../../components/game/GameOverScreen';
+import BattleArena from '../../../components/game/BattleArena';
+
 export default function AiGamePage() {
   // Game state
   const [playerDeck, setPlayerDeck] = useState([]);
@@ -184,131 +188,79 @@ export default function AiGamePage() {
   };
 
   return (
-  <div className={styles.gameContainer}>
-    {/* Header */}
-    <div className={styles.header}>
-      <h1>Poké Battle!</h1>
-      <div className={styles.scoreboard}>
-        <div className={styles.score}>
-          <span>Your deck:</span>
-          <span className={styles.scoreValue}>{playerDeck.length}</span>
+    <div className={styles.gameContainer}>
+      {/* Header Section */}
+      <div className={styles.header}>
+        <h1>Poké Battle!</h1>
+        <div className={styles.scoreboard}>
+          <div className={styles.score}>
+            <span>Your deck:</span>
+            <span className={styles.scoreValue}>{playerDeck.length}</span>
+          </div>
+          <div className={styles.score}>
+            <span>AI deck:</span>
+            <span className={styles.scoreValue}>{aiDeck.length}</span>
+          </div>
+          {gameStarted && !gameOver && (
+            <div className={styles.roundDisplay}>Round {round}</div>
+          )}
         </div>
-        <div className={styles.score}>
-          <span>AI deck:</span>
-          <span className={styles.scoreValue}>{aiDeck.length}</span>
-        </div>
-        {gameStarted && !gameOver && (
-          <div className={styles.roundDisplay}>Round {round}</div>
-        )}
       </div>
+  
+      {/* Game Message Box */}
+      <div className={styles.messageBox}>{message}</div>
+  
+      {/* Main Game Screens */}
+      {!gameStarted ? (
+        <StartScreen 
+          difficulty={difficulty}
+          onDifficultyChange={handleDifficultyChange}
+          onStart={startGame}
+        />
+      ) : gameOver ? (
+        <GameOverScreen 
+          playerDeck={playerDeck}
+          aiDeck={aiDeck}
+          onRestart={restartGame}
+        />
+      ) : (
+        <>
+          {/* Battle Area + Logger Container */}
+          <div className={styles.mainBattleArea}>
+            {/* Battle Arena Component */}
+            <BattleArena
+              playerCard={playerCard}
+              aiCard={aiCard}
+              currentTurn={currentTurn}
+              selectedStat={selectedStat}
+              aiSelectedStat={aiSelectedStat}
+              battleResult={battleResult}
+              handleStatSelect={handleStatSelect}
+              processingRound={processingRound}
+            />
+  
+            {/* Battle Logger (Right Side) */}
+            <BattleLogger logs={logs} />
+          </div>
+  
+          {/* AI Message (Keep this outside mainBattleArea) */}
+          {aiMessage && (
+            <div className={styles.aiMessageBox}>
+              <div className={styles.aiAvatar}>D</div>
+              <div className={styles.aiMessageText}>{aiMessage}</div>
+            </div>
+          )}
+        </>
+      )}
+  
+      {/* Game Controls */}
+      {gameStarted && !gameOver && (
+        <div className={styles.gameControls}>
+          <button className={styles.smallButton} onClick={restartGame}>
+            Restart Game
+          </button>
+        </div>
+      )}
     </div>
-
-    <div className={styles.messageBox}>{message}</div>
-
-    {/* Game States */}
-    {!gameStarted ? (
-      <div className={styles.startScreen}>
-        <h2>Battle Against Dexter!</h2>
-        <p>Select stats to beat the AI in this Pokémon card battle!</p>
-        
-        <div className={styles.difficultySelector}>
-          <label htmlFor="difficulty">Choose difficulty:</label>
-          <select 
-            id="difficulty" 
-            value={difficulty} 
-            onChange={handleDifficultyChange}
-            className={styles.selectField}
-          >
-            <option value="easy">Easy - Random Selection</option>
-            <option value="hard">Hard - Strategic Selection</option>
-            <option value="nightmare">Nightmare - Dexter Cheats!</option>
-          </select>
-        </div>
-        
-        <button className={styles.button} onClick={startGame}>Start Game</button>
-        <Link href="/" className={styles.homeLink}>Back to Home</Link>
-      </div>
-    ) : gameOver ? (
-      <div className={styles.gameOverScreen}>
-        <h2>{playerDeck.length === 0 ? "You Lost!" : "You Won!"}</h2>
-        <div className={styles.finalScore}>
-          <p>Final Results</p>
-          <div className={styles.scoreDisplay}>
-            <span>Your Cards: {playerDeck.length}</span>
-            <span>Dexter Cards: {aiDeck.length}</span>
-          </div>
-        </div>
-        <button className={styles.button} onClick={restartGame}>Play Again</button>
-        <Link href="/" className={styles.homeLink}>Back to Home</Link>
-      </div>
-    ) : (
-      <>
-        {/* Battle Area + Logger */}
-        <div className={styles.mainBattleArea}>
-          {/* Cards Area */}
-          <div className={styles.battleArea}>
-            <div className={styles.playerArea}>
-              <h2>Your Card {currentTurn === 'player' && "- Your Turn"}</h2>
-              {playerCard && (
-                <div className={battleResult === 'win' ? styles.winningCard : ''}>
-                  <PokemonCard 
-                    pokemon={playerCard} 
-                    onStatSelect={currentTurn === 'player' && !selectedStat && !processingRound ? handleStatSelect : null}
-                    showBack={true}
-                    selectedStat={selectedStat}
-                  />
-                </div>
-              )}
-              {selectedStat && (
-                <div className={styles.statBadge}>Chose: {selectedStat}</div>
-              )}
-            </div>
-            
-            <div className={styles.vsSection}>
-              <div className={styles.vsCircle}>VS</div>
-              {battleResult && (
-                <div className={`${styles.resultBadge} ${styles[battleResult]}`}>
-                  {battleResult === 'win' ? 'You Win!' : battleResult === 'lose' ? 'AI Wins!' : 'Draw!'}
-                </div>
-              )}
-            </div>
-            
-            <div className={styles.aiArea}>
-              <h2>Dexter Card {currentTurn === 'ai' && "- AI's Turn"}</h2>
-              {aiCard && (
-                <div className={battleResult === 'lose' ? styles.winningCard : ''}>
-                  <PokemonCard 
-                    pokemon={aiCard}
-                    showBack={true}
-                    selectedStat={aiSelectedStat}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Logger */}
-          <BattleLogger logs={logs} />
-        </div>
-
-        {/* AI Message */}
-        {aiMessage && (
-          <div className={styles.aiMessageBox}>
-            <div className={styles.aiAvatar}>D</div>
-            <div className={styles.aiMessageText}>{aiMessage}</div>
-          </div>
-        )}
-      </>
-    )}
-
-    {/* Controls */}
-    {gameStarted && !gameOver && (
-      <div className={styles.gameControls}>
-        <button className={styles.smallButton} onClick={restartGame}>
-          Restart Game
-        </button>
-      </div>
-    )}
-  </div>
-);
+  );
 }
