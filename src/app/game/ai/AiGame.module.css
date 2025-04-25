@@ -347,9 +347,13 @@
   }
   
   
-  .loggerPositioner {
+  /* .loggerPositioner {
     position: relative;
-    flex: 00 0 100px; }  /* Reserve space for logger */
+    flex: 0 0 100px;
+    margin-left: auto;
+    margin-right: auto;
+  } */
+    /* Reserve space for logger */
     
   .finalLogs {
     background: rgb(12, 28, 168);
