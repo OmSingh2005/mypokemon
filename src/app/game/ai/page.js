@@ -34,7 +34,7 @@ export default function AiGamePage() {
   // Initialize the game
   const initializeGame = useCallback(() => {
     try {
-      const { player1Deck, player2Deck } = dealCards(5);
+      const { player1Deck, player2Deck } = dealCards(10);
       setPlayerDeck(player1Deck);
       setAiDeck(player2Deck);
       setPlayerCard(player1Deck[0]);
@@ -50,7 +50,7 @@ export default function AiGamePage() {
     } catch (error) {
       setMessage("Error setting up the game: " + error.message);
     }
-  }, []);
+  }, [difficulty]);
 
   useEffect(() => {
     if (gameStarted) {

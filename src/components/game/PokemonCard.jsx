@@ -40,8 +40,12 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
           <div className={styles.imageContainer}>
             {/* We'll use a placeholder for now */}
             <div className={styles.pokemonImage}>
-              {pokemon.sprite ? (
-                <img src={pokemon.sprite} alt={pokemon.name} />
+            {pokemon.sprite ? (
+                <img 
+                  src={`/images/pokemon/${pokemon.id}.png`} // Corrected path
+                  alt={pokemon.name} 
+                  onError={() => setImageError(true)} // Set error state if image fails to load
+                />
               ) : (
                 <div className={styles.placeholder}>{pokemon.name.charAt(0)}</div>
               )}
@@ -56,8 +60,12 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
           <div className={styles.imageContainer}>
             {/* We'll use a placeholder for now */}
             <div className={styles.pokemonImage}>
-              {pokemon.sprite ? (
-                <img src={pokemon.sprite} alt={pokemon.name} />
+            {pokemon.sprite ? (
+                <img 
+                  src={`/images/pokemon/${pokemon.id}.png`} // Corrected path
+                  alt={pokemon.name} 
+                  onError={() => setImageError(true)} // Set error state if image fails to load
+                />
               ) : (
                 <div className={styles.placeholder}>{pokemon.name.charAt(0)}</div>
               )}
