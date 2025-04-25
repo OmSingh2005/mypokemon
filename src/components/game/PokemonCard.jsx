@@ -7,12 +7,12 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
   
   // Stats colors for the stat orbs
   const statColors = {
-    hp: '#FF5959',
-    attack: '#F5AC78',
-    defense: '#FAE078',
-    specialAttack: '#9DB7F5',
-    specialDefense: '#A7DB8D',
-    speed: '#FA92B2'
+    HP: '#FF5959',       // Health Points
+    ATK: '#F5AC78',      // Attack
+    DEF: '#FAE078',      // Defense
+    SPATK: '#9DB7F5',    // Special Attack
+    SPDEF: '#A7DB8D',    // Special Defense
+    SPD: '#FA92B2'       // Speed
   };
 
   const handleCardClick = () => {
