@@ -34,7 +34,7 @@ export default function AiGamePage() {
   // Initialize the game
   const initializeGame = useCallback(() => {
     try {
-      const { player1Deck, player2Deck } = dealCards(10);
+      const { player1Deck, player2Deck } = dealCards(26);
       setPlayerDeck(player1Deck);
       setAiDeck(player2Deck);
       setPlayerCard(player1Deck[0]);

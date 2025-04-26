@@ -12,7 +12,7 @@ requested_ids = [
 ]
 
 # Download images
-for pokemon_id in requested_ids:
+for pokemon_id in range(1,1026):
     url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{pokemon_id}.png"
     response = requests.get(url)
     if response.status_code == 200:
