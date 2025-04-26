@@ -431,3 +431,81 @@
       justify-content: center;
     }
   }
+  /* Add these to the existing media queries section */
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .scoreboard {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .battleArea {
+    flex-direction: row !important; /* Force horizontal layout */
+    flex-wrap: nowrap !important;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  
+  .playerArea, .aiArea {
+    flex: 1;
+    min-width: 0; /* Prevent overflow */
+  }
+  
+  .vsSection {
+    margin: 0 5px;
+  }
+  
+  .vsCircle {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .mainBattleArea {
+    flex-direction: column-reverse; /* Logger on top on mobile */
+  }
+  
+  .loggerWrapper {
+    margin-bottom: 20px;
+  }
+  
+  .aiMessageBox {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .aiAvatar {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .score {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .scoreValue {
+    font-size: 1rem;
+  }
+  
+  .roundDisplay {
+    padding: 5px 10px;
+  }
+  
+  .messageBox {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
