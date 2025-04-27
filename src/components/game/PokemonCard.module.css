@@ -62,19 +62,33 @@
   margin-bottom: 10px;
 
 }
-
+/* container */
 .pokemonImage {
+  width: 100%;
+  height: 150%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* actual image */
+.pokemonImage img {
+  max-width: 110%;
+  max-height: 100%;
+  object-fit: contain;
+}
+/*image2*/
+.pokemonImage2 {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-.pokemonImage img {
-  max-width: 200%;
+/* actual image2 */
+.pokemonImage2 img {
+  object-position: top;
+  max-width: 120%;
   max-height: 100%;
-  object-fit: contain;
 }
 
 .placeholder {

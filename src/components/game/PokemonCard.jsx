@@ -39,7 +39,7 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
           <div className={styles.pokemonName}></div>
           <div className={styles.imageContainer}>
             {/* We'll use a placeholder for now */}
-            <div className={styles.pokemonImage}>
+            <div className={styles.pokemonImage2}>
             {pokemon.sprite ? (
                 <img 
                   src={`/images/pokemon/${pokemon.id}.png`} // Corrected path
@@ -58,7 +58,6 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
         <div className={styles.cardBack}>
           <div className={styles.pokemonName}>{pokemon.name}</div>
           <div className={styles.imageContainer}>
-            {/* We'll use a placeholder for now */}
             <div className={styles.pokemonImage}>
             {pokemon.sprite ? (
                 <img 
