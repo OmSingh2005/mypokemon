@@ -1,6 +1,6 @@
 /* src/app/game/ai/AiGame.module.css */
 .gameContainer {
-    max-width: 800px;
+    max-width: 650px;
     margin: 0 auto;
     padding: 20px;
     min-height: 100vh;
@@ -123,40 +123,93 @@
   }
   
   .vsSection {
+    position: relative;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    height: 100px; /* Adjust height as needed */
+    margin: 20px 0; /* Add spacing between player and AI areas */
   }
   
   .vsCircle {
+    position: absolute;
     width: 60px;
     height: 60px;
-    border-radius: 50%;
-    background-color: var(--accent);
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+    border: 3px solid #5980ff; /* Red border for emphasis */
+    border-radius: 50%; /* Make it circular */
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
     font-size: 1.5rem;
-    color: var(--text);
-    box-shadow: var(--shadow);
+    font-weight: bold;
+    color: #5980ff; /* Red text color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    z-index: 5; /* Ensure it appears above other elements */
+  }
+  
+  .pulseAnimation {
+    animation: pulse 3.5s infinite; /* Infinite pulsing animation */
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
   
   .resultBadge {
-    padding: 8px 16px;
-    border-radius: var(--border-radius);
+    position: absolute;
+    top: 120%; /* Position below the VS circle */
+    font-size: 1.2rem;
     font-weight: bold;
-    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    opacity: 0;
-    transform: scale(0.8);
-    animation: fadeIn 0.3s forwards;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background */
+    padding: 5px 10px;
+    border-radius: 8px;
+    text-align: center;
+    z-index: 6; /* Ensure it appears above other elements */
+    opacity: 0; /* Start hidden */
+    pointer-events: none;
   }
+  
+  .resultBadge.win {
+    color: #4caf50; /* Green for win */
+  }
+  
+  .resultBadge.lose {
+    color: #f44336; /* Red for lose */
+  }
+  
   .resultBadge.draw {
-    background-color: #f0f0f0;
-    color: #333;
+    color: #ffc107; /* Yellow for draw */
   }
+  
+  .fadeIn {
+    animation: fadeIn 0.5s forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+
   
   @keyframes fadeIn {
     to {
@@ -247,7 +300,11 @@
     padding: 30px;
     text-align: center;
     box-shadow: var(--shadow);
-    margin: 40px 0;
+    margin: 10px 0;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .startScreen h2, .gameOverScreen h2 {
@@ -265,11 +322,14 @@
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .cardSelector , .difficultySelector{
     color:#2a4580;
     font-weight: bold;
-    font-size: 1.35rem;
+    font-size: 1.11rem;
     font-family: Georgia, 'Times New Roman', Times, serif;
     display: flex;
     align-items: center;
@@ -469,6 +529,13 @@
     flex: 1;
     min-width: 0; /* Prevent overflow */
   }
+  .aiChosenStatMessage {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ff5959; /* Highlight color */
+    text-align: center;
+  }
   
   .vsSection {
     margin: 0 5px;
@@ -502,6 +569,60 @@
   }
 }
 
+/* Overlay for stat messages */
+.statOverlay {
+  position: absolute;
+  bottom: 1%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for centering */
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  z-index: 10; /* Ensure it appears above other elements */
+  opacity: 0; /* Start hidden */
+  pointer-events: none; /* Prevent interaction */
+}
+
+/* Fade-in animation */
+.fadeIn {
+  animation: fadeIn 0.5s forwards; /* Fade in over 0.5 seconds */
+}
+
+/* Fade-out animation */
+.fadeOut {
+  animation: fadeOut 0.5s forwards; /* Fade out over 0.5 seconds */
+}
+
+/* Keyframes for fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%); /* Slightly above center */
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%); /* Centered */
+  }
+}
+
+/* Keyframes for fade-out */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%); /* Centered */
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -40%); /* Slightly below center */
+  }
+}
+
+
+
 @media (max-width: 480px) {
   .score {
     padding: 5px 10px;
@@ -521,3 +642,4 @@
     padding: 10px;
   }
 }
+

@@ -25,13 +25,17 @@ export default function BattleArena({
             />
           </div>
         )}
-        {selectedStat && <div className={styles.statBadge}>Chose: {selectedStat}</div>}
+        {selectedStat && (
+          <div className={`${styles.statOverlay} ${styles.fadeIn}`}>
+            You Chose: <strong>{selectedStat}</strong> <strong>{playerCard.stats[selectedStat]}</strong>
+          </div>
+        )}
       </div>
       
       <div className={styles.vsSection}>
-        <div className={styles.vsCircle}>VS</div>
+        <div className={`${styles.vsCircle} ${styles.pulseAnimation}`}>VS</div>
         {battleResult && (
-          <div className={`${styles.resultBadge} ${styles[battleResult]}`}>
+          <div className={`${styles.resultBadge} ${styles[battleResult]} ${styles.fadeIn}`}>
             {battleResult === 'win' ? 'You Win!' : battleResult === 'lose' ? 'AI Wins!' : 'Draw!'}
           </div>
         )}
@@ -41,11 +45,18 @@ export default function BattleArena({
         <h2>Dexter's Card {currentTurn === 'ai' && "- AI's Turn"}</h2>
         {aiCard && (
           <div className={battleResult === 'lose' ? styles.winningCard : ''}>
-            <PokemonCard 
-              pokemon={aiCard}
-              showBack={true}
-              selectedStat={aiSelectedStat}
-            />
+            <div className={styles.aiCardContainer}>
+              <PokemonCard
+                pokemon={aiCard}
+                showBack={true}
+                aiSelectedStat={aiSelectedStat} // Highlight AI's chosen stat
+              />
+              {aiSelectedStat && (
+                <div className={`${styles.statOverlay} ${styles.fadeIn}`}>
+                  AI Chose: <strong>{aiSelectedStat}</strong> <strong>{aiCard.stats[aiSelectedStat]}</strong>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

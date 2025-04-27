@@ -77,13 +77,13 @@ export default function AiGamePage() {
     if (result === 'player') {
       addLog(`You won with ${statName}: ${playerStatValue} vs ${aiStatValue}`, 'win');
       newPlayerDeck.push(currentAiCard, currentPlayerCard);
-      setMessage(`You win this round! Your ${statName}: ${playerStatValue} beats AI's ${statName}: ${aiStatValue}`);
+      setMessage(`You win ${statName} round! ${playerStatValue} > ${aiStatValue}`);
       setAiMessage(getAiTaunt('lose'));
       playSoundEffect('victory');
     } else if (result === 'ai') {
       newAiDeck.push(currentPlayerCard, currentAiCard);
       addLog(`AI won with ${statName}: ${aiStatValue} vs ${playerStatValue}`, 'lose');
-      setMessage(`AI wins this round! AI's ${statName}: ${aiStatValue} beats your ${statName}: ${playerStatValue}`);
+      setMessage(`AI wins ${statName} round! ${playerStatValue} < ${aiStatValue}`);
       setAiMessage(getAiTaunt('win'));
       playSoundEffect('defeat');
     } else {
@@ -190,6 +190,8 @@ export default function AiGamePage() {
     setAnimating(false);
     setSelectedStat(null)
     setAiSelectedStat(null);
+    setPlayerDeck([]);
+    setAiDeck([]);
     
   };
 

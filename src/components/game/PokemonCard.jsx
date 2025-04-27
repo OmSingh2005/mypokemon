@@ -2,18 +2,18 @@
 import { useState } from 'react';
 import styles from './PokemonCard.module.css';
 
-export default function PokemonCard({ pokemon, onStatSelect, showBack = false, selectedStat = null }) {
+export default function PokemonCard({ pokemon, onStatSelect, showBack = false, selectedStat = null , aiSelectedStat = null}) {
   const [flipped, setFlipped] = useState(showBack);
   const [imageError, setImageError] = useState(false);
   
   // Stats colors for the stat values
   const statColors = {
-    HP: '#FF5959',       // Health Points
-    ATK: '#F5AC78',      // Attack
-    DEF: '#FAE078',      // Defense
-    SPATK: '#9DB7F5',    // Special Attack
+    HP: '#FAE078',       // Health Points
+    ATK: '#FF5959',      // Attack
+    DEF: '#F5AC78',      // Defense
+    SPATK: '#FA92B2',    // Special Attack
     SPDEF: '#A7DB8D',    // Special Defense
-    SPD: '#FA92B2'       // Speed
+    SPD: '#9DB7F5'       // Speed
   };
 
   // Type colors
@@ -67,8 +67,9 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
             <div className={styles.pokemonImage}>
               {pokemon.sprite && !imageError ? (
                 <img 
-                  src={`/images/pokemon/${pokemon.id}.png`}
-                  alt={pokemon.name} 
+                  // src={`/images/pokemon/${pokemon.id}.png`}
+                  // alt={pokemon.name}
+                  src = "/Poké_Ball_icon.svg.png"
                   onError={() => setImageError(true)}
                 />
               ) : (
@@ -130,19 +131,14 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
               {Object.entries(pokemon.stats).map(([stat, value]) => (
                 <div 
                   key={stat}
-                  className={`${styles.statCell} ${selectedStat === stat ? styles.selectedStat : ''}`}
+                  className={`${styles.statCell} ${selectedStat === stat || aiSelectedStat === stat ? styles.selectedStat : ''}`}
                   style={{ backgroundColor: statColors[stat] }}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleStatClick(stat);
                   }}
                 >
-                  
-                  <div 
-                    className={styles.statValue}
-                  >
-                    {value}
-                  </div>
+                  <div className={styles.statValue}>{value}</div>
                   <div className={styles.statName}>{stat}</div>
                 </div>
               ))}
