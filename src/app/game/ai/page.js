@@ -211,6 +211,7 @@ export default function AiGamePage() {
   };
 
   return (
+    <div className={styles.full}>
     <div className={styles.gameContainer}>
       {/* Header Section */}
       <div className={styles.header}>
@@ -290,7 +291,7 @@ export default function AiGamePage() {
           )}
         </>
       )}
-  
+    </div>
     </div>
   );
 }

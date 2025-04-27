@@ -7,7 +7,7 @@ export default function BattleArena({
   currentTurn,
   selectedStat,
   aiSelectedStat,
-  battleResult,
+  result,
   handleStatSelect,
   processingRound
 }) {
@@ -16,7 +16,7 @@ export default function BattleArena({
       <div className={styles.playerArea}>
         <h2>Your Card {currentTurn === 'player' && "- Your Turn"}</h2>
         {playerCard && (
-          <div className={battleResult === 'win' ? styles.winningCard : ''}>
+          <div className={result === 'win' ? styles.winningCard : ''}>
             <PokemonCard 
               pokemon={playerCard} 
               onStatSelect={currentTurn === 'player' && !selectedStat && !processingRound ? handleStatSelect : null}
@@ -34,9 +34,9 @@ export default function BattleArena({
       
       <div className={styles.vsSection}>
         <div className={`${styles.vsCircle} ${styles.pulseAnimation}`}>VS</div>
-        {battleResult && (
-          <div className={`${styles.resultBadge} ${styles[battleResult]} ${styles.fadeIn}`}>
-            {battleResult === 'win' ? 'You Win!' : battleResult === 'lose' ? 'AI Wins!' : 'Draw!'}
+        {result && (
+          <div className={`${styles.resultBadge} ${styles[result]} ${styles.fadeIn}`}>
+            {result === 'win' ? 'You Win!' : result === 'lose' ? 'Dex Wins!' : 'draw'}
           </div>
         )}
       </div>
@@ -44,7 +44,7 @@ export default function BattleArena({
       <div className={styles.aiArea}>
         <h2>Dexter's Card {currentTurn === 'ai' && "- AI's Turn"}</h2>
         {aiCard && (
-          <div className={battleResult === 'lose' ? styles.winningCard : ''}>
+          <div className={result === 'lose' ? styles.winningCard : ''}>
             <div className={styles.aiCardContainer}>
               <PokemonCard
                 pokemon={aiCard}
