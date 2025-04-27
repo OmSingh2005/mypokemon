@@ -4,8 +4,9 @@ import styles from './PokemonCard.module.css';
 
 export default function PokemonCard({ pokemon, onStatSelect, showBack = false, selectedStat = null }) {
   const [flipped, setFlipped] = useState(showBack);
+  const [imageError, setImageError] = useState(false);
   
-  // Stats colors for the stat orbs
+  // Stats colors for the stat values
   const statColors = {
     HP: '#FF5959',       // Health Points
     ATK: '#F5AC78',      // Attack
@@ -15,8 +16,29 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
     SPD: '#FA92B2'       // Speed
   };
 
+  // Type colors
+  const typeColors = {
+    NORMAL: '#A8A878',
+    FIRE: '#F08030',
+    WATER: '#6890F0',
+    ELECTRIC: '#F8D030',
+    GRASS: '#78C850',
+    ICE: '#98D8D8',
+    FIGHTING: '#C03028',
+    POISON: '#A040A0',
+    GROUND: '#E0C068',
+    FLYING: '#A890F0',
+    PSYCHIC: '#F85888',
+    BUG: '#A8B820',
+    ROCK: '#B8A038',
+    GHOST: '#705898',
+    DRAGON: '#7038F8',
+    DARK: '#705848',
+    STEEL: '#B8B8D0',
+    FAIRY: '#EE99AC'
+  };
+
   const handleCardClick = () => {
-    // Only allow flipping if we're not in the middle of a battle
     if (!selectedStat) {
       setFlipped(!flipped);
     }
@@ -28,66 +50,102 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
     }
   };
 
+  const getTypeColor = (type) => {
+    return typeColors[type.toUpperCase()] || '#A8A878'; // Default to normal
+  };
+
   return (
     <div 
       className={`${styles.card} ${flipped ? styles.flipped : ''}`} 
       onClick={handleCardClick}
     >
       <div className={styles.cardInner}>
-        {/* Front of Card (Pokémon Image) */}
+        {/* Front of Card (Pokémon Image) - Unchanged */}
         <div className={styles.cardFront}>
-          <div className={styles.pokemonName}></div>
-          <div className={styles.imageContainer}>
-            {/* We'll use a placeholder for now */}
-            <div className={styles.pokemonImage2}>
-            {pokemon.sprite ? (
+          <div className={styles.pokemonName}>{pokemon.name}</div>
+          <div className={styles.imageContainerf}>
+            <div className={styles.pokemonImage}>
+              {pokemon.sprite && !imageError ? (
                 <img 
-                  src={`/images/pokemon/${pokemon.id}.png`} // Corrected path
+                  src={`/images/pokemon/${pokemon.id}.png`}
                   alt={pokemon.name} 
-                  onError={() => setImageError(true)} // Set error state if image fails to load
+                  onError={() => setImageError(true)}
                 />
               ) : (
                 <div className={styles.placeholder}>{pokemon.name.charAt(0)}</div>
               )}
             </div>
           </div>
-          <div className={styles.pokemonType}>{pokemon.type}</div>
+          <div className={styles.typeBadgesf}>
+            {pokemon.type.split('/').map(type => (
+              <span 
+                key={type}
+                className={styles.typeBadge}
+                style={{ backgroundColor: getTypeColor(type) }}
+              >
+                {type}
+              </span>
+            ))}
+          </div>
         </div>
-
         {/* Back of Card (Stats) */}
         <div className={styles.cardBack}>
-          <div className={styles.pokemonName}>{pokemon.name}</div>
-          <div className={styles.imageContainer}>
-            <div className={styles.pokemonImage}>
-            {pokemon.sprite ? (
+          <div className={styles.header}>
+            <h2 className={styles.pokemonName}>{pokemon.name}</h2>
+          </div>
+          
+          <div className={styles.topSection}>
+            <div className={styles.imageContainer}>
+              {pokemon.sprite && !imageError ? (
                 <img 
-                  src={`/images/pokemon/${pokemon.id}.png`} // Corrected path
-                  alt={pokemon.name} 
-                  onError={() => setImageError(true)} // Set error state if image fails to load
+                  src={`/images/pokemon/${pokemon.id}.png`}
+                  alt={pokemon.name}
+                  className={styles.pokemonImage}
+                  onError={() => setImageError(true)}
                 />
               ) : (
                 <div className={styles.placeholder}>{pokemon.name.charAt(0)}</div>
               )}
             </div>
-          </div>
-          <div className={styles.statsContainer}>
-            {Object.entries(pokemon.stats).map(([stat, value]) => (
-              <div 
-                key={stat}
-                className={`${styles.statOrb} ${selectedStat === stat ? styles.selectedStat : ''}`}
-                style={{ 
-                  backgroundColor: statColors[stat],
-                  opacity: selectedStat && selectedStat !== stat ? 0.5 : 1
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleStatClick(stat);
-                }}
-              >
-                <div className={styles.statName}>{stat}</div>
-                <div className={styles.statValue}>{value}</div>
+            
+            <div className={styles.metaData}>
+              <div className={styles.pokemonId}>#{pokemon.id}</div>
+              <div className={styles.typeBadges}>
+                {pokemon.type.split('/').map(type => (
+                  <span 
+                    key={type}
+                    className={styles.typeBadge}
+                    style={{ backgroundColor: getTypeColor(type) }}
+                  >
+                    {type}
+                  </span>
+                ))}
               </div>
-            ))}
+            </div>
+          </div>
+
+          <div className={styles.statsSection}>
+            <div className={styles.statsGrid}>
+              {Object.entries(pokemon.stats).map(([stat, value]) => (
+                <div 
+                  key={stat}
+                  className={`${styles.statCell} ${selectedStat === stat ? styles.selectedStat : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleStatClick(stat);
+                  }}
+                >
+                  
+                  <div 
+                    className={styles.statValue}
+                    style={{ color: statColors[stat] }}
+                  >
+                    {value}
+                  </div>
+                  <div className={styles.statName}>{stat}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
