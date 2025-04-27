@@ -68,7 +68,7 @@ export default function Home() {
           <div style={{ marginTop: '20px' }}>
             <h3 style={{ marginBottom: '10px' }}>How to Play:</h3>
             <ol style={{ paddingLeft: '20px', lineHeight: '1.5' }}>
-              <li>Each player receives 10 random Pokémon cards</li>
+              <li>Each player receives 26 random Pokémon cards</li>
               <li>On your turn, select one of the six stats to battle with</li>
               <li>The Pokémon with the higher stat wins the round</li>
               <li>The winner collects the loser&apos;s card</li>

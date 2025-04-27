@@ -62,7 +62,7 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
       <div className={styles.cardInner}>
         {/* Front of Card (Pokémon Image) - Unchanged */}
         <div className={styles.cardFront}>
-          <div className={styles.pokemonName}>{pokemon.name}</div>
+          {/* <div className={styles.pokemonName} >{pokemon.name}</div> */}
           <div className={styles.imageContainerf}>
             <div className={styles.pokemonImage}>
               {pokemon.sprite && !imageError ? (
@@ -76,7 +76,7 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
               )}
             </div>
           </div>
-          <div className={styles.typeBadgesf}>
+          {/* <div className={styles.typeBadgesf}>
             {pokemon.type.split('/').map(type => (
               <span 
                 key={type}
@@ -86,12 +86,13 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
                 {type}
               </span>
             ))}
-          </div>
+          </div> */}
         </div>
+        
         {/* Back of Card (Stats) */}
         <div className={styles.cardBack}>
           <div className={styles.header}>
-            <h2 className={styles.pokemonName}>{pokemon.name}</h2>
+            <h3 className={styles.pokemonName}>{pokemon.name}</h3>
           </div>
           
           <div className={styles.topSection}>
@@ -109,7 +110,7 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
             </div>
             
             <div className={styles.metaData}>
-              <div className={styles.pokemonId}>#{pokemon.id}</div>
+              <div className={styles.pokemonId}>{pokemon.id}.</div>
               <div className={styles.typeBadges}>
                 {pokemon.type.split('/').map(type => (
                   <span 
@@ -130,6 +131,7 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
                 <div 
                   key={stat}
                   className={`${styles.statCell} ${selectedStat === stat ? styles.selectedStat : ''}`}
+                  style={{ backgroundColor: statColors[stat] }}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleStatClick(stat);
@@ -138,7 +140,6 @@ export default function PokemonCard({ pokemon, onStatSelect, showBack = false, s
                   
                   <div 
                     className={styles.statValue}
-                    style={{ color: statColors[stat] }}
                   >
                     {value}
                   </div>

@@ -29,12 +29,13 @@ export default function AiGamePage() {
   const [currentTurn, setCurrentTurn] = useState('player');
   const [processingRound, setProcessingRound] = useState(false);
   const [logs, setLogs] = useState([]);
+  const [numCards, setNumCards] = useState(26); // Default number of cards to deal
 
 
   // Initialize the game
   const initializeGame = useCallback(() => {
     try {
-      const { player1Deck, player2Deck } = dealCards(26);
+      const { player1Deck, player2Deck } = dealCards(numCards);
       setPlayerDeck(player1Deck);
       setAiDeck(player2Deck);
       setPlayerCard(player1Deck[0]);
@@ -43,14 +44,14 @@ export default function AiGamePage() {
       setCurrentTurn('player');
       setProcessingRound(false);
       setMessage("Your turn! Choose a stat to battle.");
-      setAiMessage("Greetings, challenger. I am Dexter, your digital nemesis!");
+      setAiMessage("We Meet Again, challenger. I am Dexter, your digital nemesis!");
       playSoundEffect('cardFlip');
       addLog(`Game started! Difficulty: ${difficulty}`, 'action');
-      addLog(`You drew: ${player1Deck.map(card => card.name).join(', ')}`, 'action');
+      addLog(`You drew ${numCards} pokemons: ${player1Deck.map(card => card.name).join(', ')}`, 'action');
     } catch (error) {
       setMessage("Error setting up the game: " + error.message);
     }
-  }, [difficulty]);
+  }, [difficulty,numCards]);
 
   useEffect(() => {
     if (gameStarted) {
@@ -187,10 +188,17 @@ export default function AiGamePage() {
     setCurrentTurn('player');
     setProcessingRound(false);
     setAnimating(false);
+    setSelectedStat(null)
+    setAiSelectedStat(null);
+    
   };
 
   const handleDifficultyChange = (e) => {
     setDifficulty(e.target.value);
+  };
+
+  const handleNumCardsChange = (e) => {
+    setNumCards(Number(e.target.value)); // Ensure the value is a number
   };
 
   const addLog = (message, type = 'action') => {
@@ -237,7 +245,9 @@ export default function AiGamePage() {
       {!gameStarted ? (
         <StartScreen 
           difficulty={difficulty}
+          numCards={numCards}
           onDifficultyChange={handleDifficultyChange}
+          onNumCardsChange={handleNumCardsChange}
           onStart={startGame}
         />
       ) : gameOver ? (

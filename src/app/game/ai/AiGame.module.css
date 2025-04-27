@@ -259,29 +259,41 @@
     margin-bottom: 30px;
   }
   
-  .difficultySelector {
+  .Selector {
     margin-bottom: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 15px;
+  }
+  .cardSelector , .difficultySelector{
+    color:#2a4580;
+    font-weight: bold;
+    font-size: 1.35rem;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    display: flex;
+    align-items: center;
     gap: 10px;
+    flex-direction: row;
   }
   
-  .selectField {
+  .selectField, .inputField {
     padding: 10px;
     border-radius: var(--border-radius);
-    border: 1px solid #ddd;
-    background-color: white;
-    width: 100%;
-    max-width: 300px;
-    font-size: 1rem;
+    border: 2px solid #002c6bfa;
+    background-color: rgb(255, 255, 255);
+    width: fit-content;
+    max-width: 350px;
+    font-size: 1em;
+    font-weight: 700;
     cursor: pointer;
+    margin-bottom: 15px;
   }
   
   .button {
     background-color: var(--primary);
     color: white;
-    border: none;
+    border: rgb(0, 0, 0);
     border-radius: var(--border-radius);
     padding: 12px 24px;
     font-size: 1rem;
