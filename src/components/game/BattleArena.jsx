@@ -48,7 +48,7 @@ export default function BattleArena({
             <div className={styles.aiCardContainer}>
               <PokemonCard
                 pokemon={aiCard}
-                showBack={true}
+                showBack={false}
                 aiSelectedStat={aiSelectedStat} // Highlight AI's chosen stat
               />
               {aiSelectedStat && (
