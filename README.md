@@ -1,8 +1,9 @@
 # MyPokemon - Pokémon Card Duel Game
+> A nostalgic card duel game inspired by childhood Pokémon card battles. Challenge an AI opponent in a strategic duel where you compare Pokémon stats to win cards and ultimately the entire game.
 
-![Pokémon Banner](https://via.placeholder.com/800x200?text=Pokemon+Card+Duel)
+![Pokémon Banner](https://pm1.aminoapps.com/5726/cfba1970e31c5febd5a91296aebae8f86f0ce73d_hq.jpg)
 
-A nostalgic card duel game inspired by childhood Pokémon card battles. Challenge an AI opponent in a strategic duel where you compare Pokémon stats to win cards and ultimately the entire game.
+
 
 ## 🎮 Game Overview
 
@@ -41,40 +42,62 @@ This project brings back the childhood joy of traditional Pokémon card games wi
 
 2. Run the game:
    ```bash
-   python main.py
+   npm run dev
+     
    ```
-
+   > OR go to flipmon.vercel.app
+   
 ### How to Play
 
-1. Start the game to receive your hand of Pokémon cards
+1. Start the game, selecting difficulty and deck size to receive your hand of Pokémon cards
 2. During your turn, select a stat to compare (by typing the stat name)
 3. Your card and the AI's card will be compared based on the selected stat
 4. The player with the higher stat wins both cards
 5. The winner continues with the next turn
 6. The game ends when one player has no cards left
+7. Personal Score calculates based on: lesser the rounds taken to win, higher the score
 
 ## 🧩 Code Structure
-
-- `main.py`: Main game loop and player interaction
-- `pokemon.py`: Pokémon class definition and methods
-- `utils.py`: Utility functions for fetching data and game logic
-- `api_handler.py`: Functions for interacting with the PokéAPI
-
+```
+project-root/
+├── src/
+│   ├── lib/
+│   ├── components/
+│   │   └── game/
+│   │       ├── StartScreen.jsx
+│   │       ├── PokemonCard.jsx
+│   │       ├── GameOverScreen.jsx
+│   │       ├── BattleLogger.jsx
+│   │       ├── BattleArena.jsx
+│   │       ├── PokemonCard.module.css
+│   │       └── Logger.module.css
+│   ├── app/
+│   │   ├── page.js
+│   │   ├── layout.js
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   └── game/
+│   │       ├── pvp/ #future implementation using socketio
+│   │       └── ai/ #GameBot
+│   │           ├── page.js
+│   │           └── AIGame.module.css
+│   └── public/
+```
 ## 🛠️ Technical Implementation
 
 - **PokéAPI Integration**: Fetches real Pokémon data including stats and abilities
-- **Object-Oriented Design**: Utilizes classes to represent game entities
+- **Reusable Design**: Utilizes react components
 - **Game State Management**: Tracks and updates the state of the game across rounds
 - **Error Handling**: Robust error handling for API requests and user input
 
 ## 🔮 Future Enhancements
 
-- Graphical user interface (GUI) for improved player experience
+- Better Animations
 - Expanded gameplay mechanics (Special abilities, type advantages)
+- Hazards and PowerUps
 - Multiplayer support
-- Custom card creation
-- Save/load game functionality
-- Sound effects and animations
+- Making Card Collection system
+- Save/load game functionality (for Bot matches)
 
 ## 📋 Game Rules
 
