@@ -1,4 +1,4 @@
-# MyPokemon - Pokémon Card Duel Game
+# Flipmon - Pokémon Card Duel Game
 > A nostalgic card duel game inspired by childhood Pokémon card battles. Challenge an AI opponent in a strategic duel where you compare Pokémon stats to win cards and ultimately the entire game.
 
 ![Pokémon Banner](https://pm1.aminoapps.com/5726/cfba1970e31c5febd5a91296aebae8f86f0ce73d_hq.jpg)
@@ -7,7 +7,7 @@
 
 ## 🎮 Game Overview
 
-**MyPokemon** is a turn-based card game where:
+**Flipmon** is a turn-based card game where:
 
 - Players and AI receive an equal number of Pokémon cards
 - Each round, the player with the turn selects a stat to compare (HP, Attack, Defense, etc.)
